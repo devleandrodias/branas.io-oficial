@@ -30,18 +30,6 @@ test("Deve calcular uma corrida noturna no domingo", () => {
   expect(ride.calculateFare()).toBe(50);
 });
 
-test.skip("Nao deve calcular uma corrida com uma distancia inferior a 0", () => {
-  const ride = new Ride();
-  ride.addSegments(-10, new Date("2021-03-01T10:00:00"));
-  expect(ride.calculateFare()).toThrowError("Invalid Distance");
-});
-
-test.skip("Nao deve calcular uma corrida com data invalida", () => {
-  const ride = new Ride();
-  ride.addSegments(10, new Date("abcdef"));
-  expect(() => ride.calculateFare()).toThrowError("Invalid Date");
-});
-
 test("Deve calcular uma corrida com valor minimo", () => {
   const ride = new Ride();
   ride.addSegments(3, new Date("2021-03-01T10:00:00"));
