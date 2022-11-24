@@ -29,4 +29,14 @@
 ## Project
 
 - 01 (Calculate Ride)
-- 02 (E-commerce Checkout)
+- 02 (CPF Validator)
+- 03 (E-commerce Checkout)
+
+## Commands
+
+```console
+npm init -y --scope=@devleandrodias
+npm install typescript jest ts-jest ts-node @types/node @types/jest -D
+npx tsx --init
+npx ts-jest config:init
+```
