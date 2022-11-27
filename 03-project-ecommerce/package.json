@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "npx nodemon ./src/main.ts",
-    "test": "npx jest --watchAll"
+    "api": "npx nodemon ./src/api.ts",
+    "cli": "npx ts-node ./src/cli.ts",
+    "test": "npx jest --watchAll",
+    "queue:producer": "npx ts-node ./src/queue_producer.ts",
+    "queue:consumer": "npx ts-node ./src/queue_consumer.ts"
   },
   "keywords": [],
   "author": "",
