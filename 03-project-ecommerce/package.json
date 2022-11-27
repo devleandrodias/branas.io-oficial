@@ -1,0 +1,30 @@
+{
+  "name": "@devleandrodias/03-project-ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "npx nodemon ./src/main.ts",
+    "test": "npx jest --watchAll"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/jest": "^29.2.3",
+    "@types/node": "^18.11.9",
+    "jest": "^29.3.1",
+    "nodemon": "^2.0.20",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "axios": "^1.2.0",
+    "express": "^4.18.2",
+    "pg-promise": "^10.15.3",
+    "dotenv": "^16.0.3",
+    "env-var": "^7.3.0"
+  }
+}
