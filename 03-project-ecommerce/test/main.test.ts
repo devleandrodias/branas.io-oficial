@@ -12,7 +12,7 @@ test("Nao deve fazer um pedido com CPF invalido", async () => {
   expect(output.message).toBe("Invalid CPF");
 });
 
-test("Deve fazer um pedido com tres produtos", async () => {
+test("Deve fazer um pedido com 3 produtos", async () => {
   const input = {
     cpf: "905.780.100-03",
     items: [
@@ -24,7 +24,7 @@ test("Deve fazer um pedido com tres produtos", async () => {
 
   const response = await Axios.post("http://localhost:3000/checkout", input);
   const output = response.data;
-  expect(output.total).toBe(6090);
+  expect(output.total).toBe(6350);
 });
 
 test("Nao deve fazer pedido com produto que nao existe", async () => {
@@ -51,5 +51,72 @@ test("Deve fazer um pedido com 3 produtos com cupom de desconto", async () => {
 
   const response = await Axios.post("http://localhost:3000/checkout", input);
   const output = response.data;
-  expect(output.total).toBe(4872);
+  expect(output.total).toBe(5132);
+});
+
+test("Deve fazer um pedido com 3 produtos com cupom de desconto expirado", async () => {
+  const input = {
+    cpf: "905.780.100-03",
+    items: [
+      { idProduct: 1, quantity: 1 },
+      { idProduct: 2, quantity: 1 },
+      { idProduct: 3, quantity: 3 },
+    ],
+    coupon: "VALE20_EXPIRED",
+  };
+
+  const response = await Axios.post("http://localhost:3000/checkout", input);
+  const output = response.data;
+  expect(output.total).toBe(6350);
+});
+
+test("Deve fazer um pedido com quantidade negativa", async () => {
+  const input = {
+    cpf: "905.780.100-03",
+    items: [{ idProduct: 1, quantity: -1 }],
+  };
+
+  const response = await Axios.post("http://localhost:3000/checkout", input);
+  expect(response.status).toBe(422);
+
+  const output = response.data;
+  expect(output.message).toBe("Quantity must be positive");
+});
+
+test("Deve fazer um pedido com item duplicado", async () => {
+  const input = {
+    cpf: "905.780.100-03",
+    items: [
+      { idProduct: 1, quantity: 1 },
+      { idProduct: 1, quantity: 1 },
+    ],
+  };
+
+  const response = await Axios.post("http://localhost:3000/checkout", input);
+  expect(response.status).toBe(422);
+
+  const output = response.data;
+  expect(output.message).toBe("Duplicated product");
+});
+
+test("Deve fazer um pedido calculando o frete", async () => {
+  const input = {
+    cpf: "905.780.100-03",
+    items: [{ idProduct: 1, quantity: 1 }],
+  };
+
+  const response = await Axios.post("http://localhost:3000/checkout", input);
+  const output = response.data;
+  expect(output.total).toBe(1030);
+});
+
+test("Deve fazer um pedido calculando o frete minimo de 10 reais", async () => {
+  const input = {
+    cpf: "905.780.100-03",
+    items: [{ idProduct: 3, quantity: 1 }],
+  };
+
+  const response = await Axios.post("http://localhost:3000/checkout", input);
+  const output = response.data;
+  expect(output.total).toBe(40);
 });

@@ -7,4 +7,12 @@ export const envs = {
     .get("POSTGRES_URL_CONNECTION")
     .required()
     .asString(),
+  rabbitMqUrlConnection: env
+    .get("RABBITMQ_URL_CONNECTION")
+    .required()
+    .asString(),
+  rabbitMqCheckoutChannel: env
+    .get("RABBITMQ_CHECKOUT_CHANNEL")
+    .required()
+    .asString(),
 };

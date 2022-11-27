@@ -38,8 +38,18 @@ app.post("/checkout", async (req, res) => {
     });
   } else {
     let total = 0;
+    let freight = 0;
+
+    const productsIds: number[] = [];
 
     for (const item of req.body.items) {
+      if (productsIds.some((productId) => productId === item.idProduct)) {
+        return res.status(422).json({
+          message: "Duplicated product",
+        });
+      }
+
+      productsIds.push(item.idProduct);
       // const product = products.find(
       //   (product) => product.idProduct === item.idProduct
       // );
@@ -54,7 +64,22 @@ app.post("/checkout", async (req, res) => {
           message: "Product not found",
         });
       } else {
+        if (item.quantity <= 0) {
+          return res.status(422).json({
+            message: "Quantity must be positive",
+          });
+        }
+
         total += Number(product.price) * item.quantity;
+
+        const volume =
+          (product.width / 100) *
+          (product.height / 100) *
+          (product.length / 100);
+
+        const density = Number(product.weight) / volume;
+        const itemFreight = 1000 * volume * (density / 100);
+        freight += itemFreight >= 10 ? itemFreight : 10;
       }
     }
 
@@ -66,10 +91,14 @@ app.post("/checkout", async (req, res) => {
         [req.body.coupon]
       );
 
-      if (coupon) {
+      const today = new Date();
+
+      if (coupon && coupon.expire_date.getTime() > today.getTime()) {
         total -= (total * coupon.percentage) / 100;
       }
     }
+
+    total += freight;
 
     res.json({ total });
   }
