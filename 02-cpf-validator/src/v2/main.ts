@@ -1,4 +1,4 @@
-export function validateCpf(rawCpf: string) {
+export function validateCpf(rawCpf: string | null | undefined) {
   if (!rawCpf) return false;
   const cleanCpf = rawCpf.replace(/\D/g, "");
 
