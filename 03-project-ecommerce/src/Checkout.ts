@@ -1,11 +1,16 @@
+import { Mailer } from "./Mailer";
 import { validate } from "./CpfValidator";
 import { CouponData } from "./CouponData";
 import { ProductData } from "./ProductData";
+import { MailerConsole } from "./MailerConsole";
+import { CurrencyGateway } from "./CurrencyGateway";
 
 export class Checkout {
   constructor(
     readonly productData: ProductData,
-    readonly couponData: CouponData
+    readonly couponData: CouponData,
+    readonly currencyGateway: CurrencyGateway,
+    readonly mailer: Mailer = new MailerConsole()
   ) {}
 
   async execute(input: Input) {
@@ -16,6 +21,8 @@ export class Checkout {
     } else {
       let total = 0;
       let freight = 0;
+
+      const currencies: any = await this.currencyGateway.getCurrencies();
 
       const productsIds: number[] = [];
 
@@ -35,7 +42,10 @@ export class Checkout {
             throw new Error("Quantity must be positive");
           }
 
-          total += Number(product.price) * item.quantity;
+          total +=
+            Number(product.price) *
+            (currencies[product.currency] || 1) *
+            item.quantity;
 
           const volume =
             (product.width / 100) *
@@ -60,6 +70,10 @@ export class Checkout {
 
       total += freight;
 
+      if (input.email) {
+        this.mailer.send(input.email, "Checkout success", "ABC");
+      }
+
       return { total };
     }
   }
@@ -72,6 +86,7 @@ type Item = {
 
 type Input = {
   cpf: string;
+  email?: string;
   items: Item[];
   coupon?: string;
 };
