@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "api": "npx nodemon ./src/api.ts",
+    "api": "npx nodemon ./src/main_api.ts",
     "cli": "npx ts-node ./src/cli.ts",
     "test": "npx jest --watchAll",
     "queue:producer": "npx ts-node ./src/queue_producer.ts",

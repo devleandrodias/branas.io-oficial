@@ -1,10 +1,14 @@
-import { Checkout } from "./Checkout";
-import { CouponDataDatabase } from "./CouponDataDatabase";
-import { ProductDataDatabase } from "./ProductDataDatabase";
+import { Checkout } from "./application/Checkout";
+import { OrderDataDatabase } from "./infra/data/OrderDataDatabase";
+import { CouponDataDatabase } from "./infra/data/CouponDataDatabase";
+import { ProductDataDatabase } from "./infra/data/ProductDataDatabase";
+import { PgPromiseConnection } from "./infra/database/PgPromiseConnection";
 
 const input: any = {
   items: [],
 };
+
+const connection = new PgPromiseConnection();
 
 process.stdin.on("data", async (chunk) => {
   const command = chunk.toString().replace(/\n/g, "");
@@ -22,10 +26,11 @@ process.stdin.on("data", async (chunk) => {
 
   if (command.startsWith("checkout")) {
     try {
-      const productData = new ProductDataDatabase();
-      const couponData = new CouponDataDatabase();
+      const productData = new ProductDataDatabase(connection);
+      const couponData = new CouponDataDatabase(connection);
+      const orderData = new OrderDataDatabase(connection);
 
-      const checkout = new Checkout(productData, couponData);
+      const checkout = new Checkout(productData, couponData, orderData);
       const output = await checkout.execute(input);
 
       console.log(output);
