@@ -10,6 +10,7 @@ import { CurrencyGateway } from "../src/infra/gateway/CurrencyGateway";
 import { CurrencyGatewayFaker } from "../src/infra/gateway/CurrencyGatewayFaker";
 import { CurrencyGatewayRandom } from "../src/infra/gateway/CurrencyGatewayRandom";
 import { Currencies } from "../src/domain/entities/Currencies";
+import { Product } from "../src/domain/entities/Product";
 
 test.skip("Deve fazer um pedido com 3 produtos", async () => {
   const input = {
@@ -497,7 +498,7 @@ test.skip("Deve fazer um pedido com 3 produtos com codigo do pedido", async () =
   };
 
   const productData: ProductData = {
-    getProducts: async function (idProduct: number): Promise<any> {
+    getProducts: async function (idProduct: number): Promise<Product> {
       const products: {
         [idProduct: number]: {
           idProduct: number;

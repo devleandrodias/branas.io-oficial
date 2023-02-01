@@ -5,6 +5,10 @@ import { Product } from "./Product";
 import { OrderCode } from "./OrderCode";
 import { FreightCalculator } from "./FreightCalculator";
 
+/**
+ * Os use cases conhecem as entities, mas as entities nao conhecem os use cases
+ */
+
 export class Order {
   cpf: Cpf;
   code: OrderCode;

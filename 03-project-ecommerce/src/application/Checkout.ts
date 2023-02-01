@@ -7,6 +7,12 @@ import { MailerConsole } from "../infra/mailer/MailerConsole";
 import { CurrencyGateway } from "../infra/gateway/CurrencyGateway";
 import { CurrencyGatewayRandom } from "../infra/gateway/CurrencyGatewayRandom";
 
+/**
+ * Papel dos use cases (Ex. Checkout) eh fazer orquestracao das entidades
+ * Ao mesmo tempo que viabiliza a interacao com mundo exterior por meio
+ * dos interfaces adapters
+ */
+
 export class Checkout {
   constructor(
     readonly productData: ProductData,

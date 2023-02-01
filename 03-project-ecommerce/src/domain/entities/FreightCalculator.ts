@@ -1,10 +1,14 @@
+import { Product } from "./Product";
+
 // Regra independente
 
 export class FreightCalculator {
-  static calculate(product: any) {
-    const volume =
-      (product.width / 100) * (product.height / 100) * (product.length / 100);
-    const density = Number(product.weight) / volume;
+  /**
+   * Inveja de dados, quando um metodo esta referenciando muitas vezes a entidade
+   */
+  static calculate(product: Product) {
+    const volume = product.getVolume();
+    const density = product.getDensity();
     const itemFreight = 1000 * volume * (density / 100);
     return itemFreight >= 10 ? itemFreight : 10;
   }
