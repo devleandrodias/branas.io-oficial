@@ -11,6 +11,7 @@ import { CurrencyGatewayFaker } from "../src/infra/gateway/CurrencyGatewayFaker"
 import { CurrencyGatewayRandom } from "../src/infra/gateway/CurrencyGatewayRandom";
 import { Currencies } from "../src/domain/entities/Currencies";
 import { Product } from "../src/domain/entities/Product";
+import { Coupon } from "../src/domain/entities/Coupon";
 
 test.skip("Deve fazer um pedido com 3 produtos", async () => {
   const input = {
@@ -487,7 +488,7 @@ test.skip("Deve fazer um pedido com 4 produtos com moedas diferentes com mock", 
   expect(output.total).toBe(6580);
 });
 
-test.skip("Deve fazer um pedido com 3 produtos com codigo do pedido", async () => {
+test("Deve fazer um pedido com 3 produtos com codigo do pedido", async () => {
   const input = {
     cpf: "905.780.100-03",
     items: [
@@ -500,43 +501,11 @@ test.skip("Deve fazer um pedido com 3 produtos com codigo do pedido", async () =
   const productData: ProductData = {
     getProducts: async function (idProduct: number): Promise<Product> {
       const products: {
-        [idProduct: number]: {
-          idProduct: number;
-          description: string;
-          price: number;
-          width: number;
-          height: number;
-          length: number;
-          weight: number;
-        };
+        [idProduct: number]: Product;
       } = {
-        1: {
-          idProduct: 1,
-          description: "A",
-          price: 1000,
-          width: 100,
-          height: 30,
-          length: 10,
-          weight: 3,
-        },
-        2: {
-          idProduct: 2,
-          description: "B",
-          price: 5000,
-          width: 50,
-          height: 50,
-          length: 50,
-          weight: 22,
-        },
-        3: {
-          idProduct: 1,
-          description: "C",
-          price: 30,
-          width: 10,
-          height: 10,
-          length: 10,
-          weight: 0.9,
-        },
+        1: new Product(1, "A", 1000, 100, 30, 10, 3),
+        2: new Product(2, "B", 5000, 50, 50, 50, 22),
+        3: new Product(1, "C", 30, 10, 10, 10, 0.9),
       };
 
       return products[idProduct];
@@ -544,21 +513,18 @@ test.skip("Deve fazer um pedido com 3 produtos com codigo do pedido", async () =
   };
 
   const couponData: CouponData = {
-    getCoupon: async function (code: string): Promise<any> {
+    getCoupon: async function (code: string): Promise<Coupon> {
       const coupons: {
-        [code: string]: { code: string; percentage: number; expire_date: Date };
+        [code: string]: Coupon;
       } = {
-        VALE20: {
-          code: "VALE20",
-          percentage: 20,
-          expire_date: new Date("2022-12-01T10:00:00"),
-        },
-        VALE20_EXPIRED: {
-          code: "VALE20_EXPIRED",
-          percentage: 20,
-          expire_date: new Date("2022-11-01T10:00:00"),
-        },
+        VALE20: new Coupon("VALE20", 20, new Date("2022-12-01T10:00:00")),
+        VALE20_EXPIRED: new Coupon(
+          "VALE20_EXPIRED",
+          20,
+          new Date("2022-11-01T10:00:00")
+        ),
       };
+
       return coupons[code];
     },
   };
